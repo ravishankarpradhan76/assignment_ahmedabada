@@ -15,5 +15,3 @@ This project focuses on beautiful UI, smooth animations, and a clean architectur
   - Location, rating, distance, restaurants info
   - Description text
   - "Book A Trip" CTA button
-
-## 📂 Folder Structure
