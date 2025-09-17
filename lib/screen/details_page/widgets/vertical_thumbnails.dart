@@ -73,6 +73,23 @@ class VerticalThumbnails extends StatelessWidget {
                 ),
               ],
             ),
+            child: index == 0
+                ? Center(
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.85),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.black87,
+                  size: 22,
+                ),
+              ),
+            )
+                : null,
           ),
         );
       }

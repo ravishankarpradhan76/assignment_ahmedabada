@@ -3,6 +3,8 @@ import 'package:assignment_ahmedabad/utils/colors.dart';
 import 'package:assignment_ahmedabad/utils/custom_widgets/custom_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../full_screen_page/full_screen_image_page.dart';
+import '../full_screen_page/full_screen_video_page.dart';
+import 'package:video_player/video_player.dart';
 import 'widgets/stat_item.dart';
 import 'widgets/vertical_thumbnails.dart';
 import 'widgets/title_location_fav.dart';
@@ -31,6 +33,8 @@ class _DetailsPageState extends State<DetailsPage>
   late Animation<double> _opacityAnim;
   late Animation<Offset> _slideAnim;
   late String _selectedImage;
+  bool _isVideoSelected = false;
+  VideoPlayerController? _videoController;
 
   @override
   void initState() {
@@ -58,11 +62,28 @@ class _DetailsPageState extends State<DetailsPage>
   @override
   void dispose() {
     _controller.dispose();
+    _videoController?.dispose();
     super.dispose();
   }
 
   void _onThumbnailTap(String img) {
-    setState(() => _selectedImage = img);
+    final bool isVideo = img.endsWith('.mp4');
+    setState(() {
+      _isVideoSelected = isVideo;
+      _selectedImage = img;
+    });
+    if (isVideo) {
+      _videoController?.dispose();
+      _videoController = VideoPlayerController.asset(img)
+        ..initialize().then((_) {
+          setState(() {});
+          _videoController?.play();
+          _videoController?.setLooping(true);
+        });
+    } else {
+      _videoController?.dispose();
+      _videoController = null;
+    }
   }
 
   @override
@@ -85,30 +106,54 @@ class _DetailsPageState extends State<DetailsPage>
                 height: size.height * 0.50,
                 child: Stack(
                   children: [
-                    Hero(
-                      tag: _selectedImage,
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(32),
-                            bottomRight: Radius.circular(32),
-                          ),
-                          image: DecorationImage(
-                            image: AssetImage(_selectedImage),
-                            fit: BoxFit.cover,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 18,
-                              spreadRadius: 2,
-                              offset: const Offset(0, 8),
+                    if (_isVideoSelected)
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(32),
+                          bottomRight: Radius.circular(32),
+                        ),
+                        child: _videoController?.value.isInitialized == true
+                            ? Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: _videoController!.value.size.width,
+                                height: _videoController!.value.size.height,
+                                child: VideoPlayer(_videoController!),
+                              ),
                             ),
+                            Container(color: Colors.black26),
                           ],
+                        )
+                            : const Center(child: CircularProgressIndicator()),
+                      )
+                    else
+                      Hero(
+                        tag: _selectedImage,
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(32),
+                              bottomRight: Radius.circular(32),
+                            ),
+                            image: DecorationImage(
+                              image: AssetImage(_selectedImage),
+                              fit: BoxFit.cover,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 18,
+                                spreadRadius: 2,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
                     Positioned(
                       top: 35,
@@ -141,12 +186,27 @@ class _DetailsPageState extends State<DetailsPage>
                         ),
                         child: IconButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => FullScreenImagePage(image: _selectedImage),
-                              ),
-                            );
+                            if (_isVideoSelected) {
+                              _videoController?.pause();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FullScreenVideoPage(assetPath: _selectedImage),
+                                ),
+                              ).then((_) {
+                                // Resume inline video when coming back
+                                if (mounted && _isVideoSelected) {
+                                  _videoController?.play();
+                                }
+                              });
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FullScreenImagePage(image: _selectedImage),
+                                ),
+                              );
+                            }
                           },
                           icon: const Icon(
                             Icons.fullscreen,
@@ -163,15 +223,14 @@ class _DetailsPageState extends State<DetailsPage>
                       child: VerticalThumbnails(
                         height: size.height * 0.45,
                         images: [
+                          "assets/svg/160342-820741249_small.mp4",
                           "assets/png/desc.png",
                           "assets/png/Recommended_places.png",
                           "assets/png/Recommended_places2.png",
                           "assets/png/Recommended_places4.png",
                         ],
                         selectedImage: _selectedImage,
-                        onTap: (img) {
-                          setState(() => _selectedImage = img);
-                        },
+                        onTap: _onThumbnailTap,
                       ),
 
                     ),
@@ -218,8 +277,8 @@ class _DetailsPageState extends State<DetailsPage>
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                  'Est vel odio elementum non id venenatis. Enim augue velit '
-                  'tristique eu viverra. Massa.',
+                      'Est vel odio elementum non id venenatis. Enim augue velit '
+                      'tristique eu viverra. Massa.',
                   style: GoogleFonts.montserrat(fontSize: 16, height: 1.6),
                 ),
               ),
