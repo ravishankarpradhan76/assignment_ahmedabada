@@ -15,3 +15,13 @@ This project focuses on beautiful UI, smooth animations, and a clean architectur
   - Location, rating, distance, restaurants info
   - Description text
   - "Book A Trip" CTA button
+
+
+## App Screenshot
+
+Here are the screenshots of the app:
+
+![Screenshot 1](assets/screenshots/home_screen.png)
+![Screenshot 2](assets/screenshots/details_screen.png)
+![Screenshot 3](assets/screenshots/fullscreen.png)
+![Screenshot 4](assets/screenshots/fullscreen1.png)
