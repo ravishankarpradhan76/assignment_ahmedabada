@@ -1,16 +1,19 @@
-# assignment_ahmedabad
+# Travel App UI (Flutter)
 
-A new Flutter project.
+A modern travel app UI built with Flutter based on the provided Figma design.  
+This project focuses on beautiful UI, smooth animations, and a clean architecture.
 
-## Getting Started
+## 🚀 Features
+- Home Screen with:
+  - Greeting text & location
+  - Card carousel (swipeable destinations)
+  - Category chips (Popular, Lake, Beach, Mountain)
+  - Horizontal list of popular destinations
+- Detail Screen with:
+  - Large hero image
+  - Image previews on side
+  - Location, rating, distance, restaurants info
+  - Description text
+  - "Book A Trip" CTA button
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📂 Folder Structure
