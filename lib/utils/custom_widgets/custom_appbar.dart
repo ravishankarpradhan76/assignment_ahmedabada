@@ -1,3 +1,4 @@
+import 'package:assignment_ahmedabad/utils/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,29 +26,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    _handleLocation();
   }
-
-  Future<void> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+  Future<void> _handleLocation() async {
+    final position = await LocationService.getCurrentPosition();
+    if (position == null) return;
 
     setState(() {
       currentPosition = LatLng(position.latitude, position.longitude);
     });
 
-    // 👇 Reverse geocode
-    List<Placemark> placemarks = await placemarkFromCoordinates(
+    final placemarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
     );

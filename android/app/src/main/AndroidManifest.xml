@@ -8,6 +8,8 @@
         android:label="assignment_ahmedabad"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD0ff55UPgttphhMg3mmuq_M_rbf6y5E8Q"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -35,11 +37,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- TODO: Replace YOUR_API_KEY with your actual key from Google Cloud Console -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
-    </application>
+         </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.

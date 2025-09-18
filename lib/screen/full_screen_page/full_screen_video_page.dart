@@ -38,9 +38,9 @@ class _FullScreenVideoPageState extends State<FullScreenVideoPage> {
           Center(
             child: _controller.value.isInitialized
                 ? AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
-                  )
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            )
                 : const CircularProgressIndicator(color: Colors.white),
           ),
           SafeArea(

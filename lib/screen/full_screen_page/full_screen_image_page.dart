@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
 import '../details_page/widgets/vertical_thumbnails.dart';
+import 'full_screen_video_page.dart';
 
 class FullScreenImagePage extends StatefulWidget {
   final String image;
@@ -39,9 +40,10 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
           Positioned(
             bottom: 75,
             left: 50,
-            child:VerticalThumbnails(
+            child:  VerticalThumbnails(
               height: size.height * 0.45,
               images: [
+                "assets/svg/160342-820741249_small.mp4",
                 "assets/png/desc.png",
                 "assets/png/Recommended_places.png",
                 "assets/png/Recommended_places2.png",
@@ -49,7 +51,16 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
               ],
               selectedImage: _selectedImage,
               onTap: (img) {
-                setState(() => _selectedImage = img);
+                if (img.endsWith('.mp4')) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FullScreenVideoPage(assetPath: img),
+                    ),
+                  );
+                } else {
+                  setState(() => _selectedImage = img);
+                }
               },
               selectedSize: 90,
               unselectedSize: 75,
@@ -57,19 +68,19 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
 
           ),
 
-      Positioned(
-        top: 42,
-        left: 20,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color(0xff3d7286),
-            shape: BoxShape.circle,
-          ),
-          child: IconButton(
-              icon: const Icon(Icons.fullscreen_exit, color: AppColors.whiteColor, size: 28),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),)
+          Positioned(
+            top: 42,
+            left: 20,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xff3d7286),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.fullscreen_exit, color: AppColors.whiteColor, size: 28),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),)
         ],
       ),
     );
